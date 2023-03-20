@@ -1,8 +1,8 @@
 import os
 
 #main
-read_path = "./in"
-write_path = "./SIMD_OP"
+read_path = "./orign"
+write_path = "./in"
 
 files = os.listdir(read_path)
 name_cnt = 1
@@ -23,11 +23,11 @@ for file in files:
         '''
         gauss_input = f"{read_path}/gauss_{name_cnt}.bmp"
         gauss_output = f"{write_path}/gauss_d_{name_cnt}.bmp"
-        gauss_command = f"./../Algorithm/main {gauss_input} {gauss_output} 1 1"
+        gauss_command = f"./../Algorithm/main {gauss_input} {gauss_output} "
 
         pepper_input = f"{read_path}/pepper_{name_cnt}.bmp"
         pepper_output = f"{write_path}/pepper_d_{name_cnt}.bmp"
-        pepper_command = f"./../Algorithm/main {pepper_input} {pepper_output} 1 1"
+        pepper_command = f"./../Algorithm/main {pepper_input} {pepper_output}"
         
         os.system(gauss_command)
         os.system(pepper_command)

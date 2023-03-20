@@ -23,23 +23,12 @@ At present, floating point algorithm and __fixed-point__ algorithm have been imp
 
 ## Operation
 
-1. Run SIMD Vector Optimization algorithm:
 ```shell
 #Input and output images are provided by command line parameters
-#1 is a choosing tag
-#loop_n is used for performace evaluation. Default Value is 1
-./main "input-img" "output-img" 1 loop_num
+./main "input-img" "output-img"
 
 ```
 
-2. Run the scalar version developed by embedded business unit:
-```shell
-#Input and output images are provided by command line parameters
-#0 is a choosing tag
-#loop_n is used for performace evaluation. Default Value is 1
-./main "input-img" "output-img" 0 loop_num
-
-```
 
 ## Reference:
 OpenCV 4.x
