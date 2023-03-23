@@ -1,6 +1,7 @@
 #include "bilateralFilter_simd.h"
 #include <math.h>
 #include"../Utils/cv_utils.h"
+
 #define BF
 
 #ifdef BF
@@ -277,3 +278,96 @@ void bilateralFilter_simd_beta(Mat_t* _src, Mat_t* _dst, int radius,
     bilateralFilter_fixed_beta(_src, _dst, radius, sigmaColor, sigmaSpace);
 }
 #endif
+
+/*Fraction Part;;; 
+//ADDITION DATE: Mar23rd*/
+void bilateralFilter_fraction(Mat_t* src, Mat_t* dst, int radius,
+                        double sigma_color, double sigma_space)
+{
+    //channel size. At present, there are only two cases:
+    //1 and 3
+    int cn = src->cn;
+    //variable declaration
+    /*index val; i, j;
+    //diameter...;
+    //filter size: maxk
+    //img size: size*/
+    int i, j, diameter, maxk, size;
+
+    //Effective guarantee of variable
+    if(sigma_color <= 0)
+        sigma_color = 1;
+    if(sigma_space <= 0)
+        sigma_space = 1;
+
+    //weight denominator pre calculation
+    double gauss_color_coeff = -0.5/(sigma_color * sigma_color)/(cn * cn);
+    double gauss_space_coeff = -0.5/(sigma_space * sigma_space);
+
+    //Assign more bit width to more sensitive weight
+    //uint32_t smax = (uint32_t)(pow(2,(10))-1);
+    //uint32_t cmax = (uint32_t)(pow(2,(14)));
+    //uint32_t max_chk = smax * cmax * 256;
+    //printf("maximu=%ud\n",max_chk);
+
+    //Effective guarantee of variable
+    if(radius <= 0)
+        radius = (int)(sigma_space*1.5);
+
+    radius = radius>1 ? radius: 1;
+
+    diameter = radius*2 + 1;
+
+    //Expand the boundary to eliminate the branching judgement
+    //of the boundary in the subsequent calculation
+    Mat_t tmp;
+    copyMakeBorder( src, &tmp, radius);
+
+    size = dst->width * dst->height * cn;
+    if(cn == 1){
+        dst->data.gray = (uint8_t*)malloc(size*sizeof(uint8_t));
+        memset(dst->data.gray, 0, size);
+    }else{
+        dst->data.rgb = (rgb_t*)malloc(size*sizeof(uint8_t));
+        memset(dst->data.rgb, 0, size);
+    }
+
+    //initialize Look-Up-Table
+    //The weight table provides the weight of the filtering formular;
+    //The offest table provides offsets of other pixels in the window with
+    //the center point as the base address.
+    fraction * color_weight = (fraction*)malloc(256*cn*sizeof(fraction));
+    fraction * space_weight = (fraction*)malloc(diameter * diameter * sizeof(fraction));
+    int * space_ofs = (int*)malloc(diameter * diameter * sizeof(int));
+    //printf("Color_weight:\n");
+    for(i=0; i<256 *cn; i++){
+        //The maximum of pixel val is 255;
+        //Thus, the maximum of weight = sqrt(2^32/256)
+         d2fr(exp(i*i*gauss_color_coeff), &color_weight[i]);
+        //printf("cw[%d]=%d\n",i, color_weight[i]);
+    }
+
+    //printf("Space_weight:\n");
+    for(i=-radius, maxk = 0; i <= radius; i++)
+    {
+        j = -radius;
+
+        for(; j <= radius; j++)
+        {
+            double r = sqrt((double)i*i + (double) j*j);
+
+            if(r > radius)
+                continue;
+
+            d2fr(exp(r*r*gauss_space_coeff),&space_weight[maxk]);
+            //printf("sw[%d]=%d\n",maxk, space_weight[maxk]);
+            space_ofs[maxk++] = (int)(i * tmp.width*cn + j*cn);
+        }
+    }
+
+    bilateralFilterInvoker_fraction(dst, &tmp, radius, maxk, space_ofs, space_weight, color_weight);
+
+    free(color_weight);
+    free(space_weight);
+    free(space_ofs);
+}

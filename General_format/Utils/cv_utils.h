@@ -10,4 +10,7 @@ void bilateralFilter_simd(Mat_t* _src, Mat_t* _dst, int radius,
                      double sigmaColor, double sigmaSpace, uint8_t tag);
 void bilateralFilter_simd_beta(Mat_t* _src, Mat_t* _dst, int radius,
                            double sigmaColor, double sigmaSpace);
+        
+void bilateralFilter_fraction(Mat_t* src, Mat_t* dst, int radius,
+                        double sigma_color, double sigma_space);
 #endif

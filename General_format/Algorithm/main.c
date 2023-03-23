@@ -48,6 +48,7 @@ int main(int argc, char* argv[])
     }
     if(MY_VERSION){
         bilateralFilter_simd_beta(&tmp, &dst, 2, 35, 15);
+        //bilateralFilter_fraction(&tmp,&dst, 2, 35, 15);
     }
     else{
         double sigma_s = 15;

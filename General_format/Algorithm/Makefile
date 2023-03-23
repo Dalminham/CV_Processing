@@ -1,7 +1,7 @@
 CC=$(CROSS_COMPILE)gcc
 AR=$(CROSS_COMPILE)ar rcs
 CFLAGS=  -O3   -ggdb -g
-LIBS= 
+LIBS= -lm
 
 
 INCS=

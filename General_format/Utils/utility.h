@@ -3,6 +3,7 @@
 
 #include <assert.h>
 #include <stdint.h>
+#include "../Utils/fraction.h"
 #define CV_SIMD_WIDTH 16
 #define V_FLOAT32_NLANES 4
 #define V_UINT32_NLANES 4
@@ -25,5 +26,11 @@ inline uint32_t* alignPtr_w(uint32_t* ptr, int n)
 {
     assert((n & (n-1)) == 0); // n is a power of 2
     return (uint32_t*)(((size_t)ptr + n-1) & -n);
+}
+
+inline fraction* alignPtr_fr(fraction* ptr, int n)
+{
+    assert((n & (n-1)) == 0); // n is a power of 2
+    return (fraction*)(((size_t)ptr + n-1) & -n);
 }
 #endif
