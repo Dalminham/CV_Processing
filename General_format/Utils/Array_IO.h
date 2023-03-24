@@ -26,3 +26,13 @@ void Array_Read(const char* file_path, uint8_t* array, int size)
 
     fread(array, size, 1, fp);
 }
+
+void Array_Print(uint8_t* array, int size)
+{
+    for(int i=0; i<size; i++)
+    {
+        printf("%d,",array[i]);
+        if(i%64 ==0)
+        printf("\n");
+    }
+}
