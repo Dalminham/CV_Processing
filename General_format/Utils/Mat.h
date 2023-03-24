@@ -19,7 +19,7 @@ typedef union
 
 typedef struct mat
 {
-    pixel_t data;        //image datq
+    pixel_t data;        //image data
     uint32_t width;     //image width
     uint32_t height;    //image height
     uint8_t cn;         //channel size
@@ -34,5 +34,9 @@ void copy_MatHead(Mat_t *src, Mat_t* dst);
 //For evaluation
 void Mat2Plane(Mat_t *mat, image_t *image);
 void Plane2Mat(image_t *image, Mat_t *mat);
+
+//Improvement
+void Mat2Array(Mat_t* mat, uint8_t* array);
+void Array2Mat(Mat_t* mat, uint8_t* array);
 
 #endif

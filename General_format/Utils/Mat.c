@@ -326,3 +326,42 @@ void Plane2Mat(image_t *image, Mat_t *mat)
         band = band->next_band;
     }while(1);
 }
+
+
+void Mat2Array(Mat_t* mat, uint8_t* array)
+{
+    uint32_t height = mat->height, width = mat->width, cn = mat->cn;
+    if(cn == 1){
+        for(int i=0; i < height*width*cn; i++)
+        {
+            array[i] = mat->data.gray[i];
+        }
+    }
+    else{
+        for(int i=0, j=0; i < height*width*cn; i+=3 , j++)
+        {
+            array[i] = mat->data.rgb[j].r;
+            array[i+1] = mat->data.rgb[j].g;
+            array[i+2] = mat->data.rgb[j].b;
+        }
+    }
+}
+
+void Array2Mat(Mat_t* mat, uint8_t* array)
+{
+    uint32_t height = mat->height, width = mat->width, cn = mat->cn;
+    if(cn == 1){
+        for(int i=0; i < height*width; i++)
+        {
+            mat->data.gray[i] = array[i];
+        }
+    }
+    else{
+        for(int i=0, j=0; i < height*width*3; i+=3, j++)
+        {
+            mat->data.rgb[j].r = array[i];
+            mat->data.rgb[j].g = array[i+1];
+            mat->data.rgb[j].b = array[i+2];
+        }
+    }
+}

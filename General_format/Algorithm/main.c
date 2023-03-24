@@ -1,6 +1,7 @@
 #include "../Utils/bmp.h"
 #include "../Utils/Mat.h"
 #include "../Utils/cv_utils.h"
+#include "../Utils/Array_IO.h"
 #include <assert.h>
 #include <stdlib.h>
 #define FLOAT6(value) ((float)((int)(((value) + 0.0000005) * 1000000)) / 1000000)
@@ -35,6 +36,16 @@ int main(int argc, char* argv[])
 
     /*transformation*/
     bmp2Mat(&bmp, &mat);
+
+    /*Array IO*/
+    uint32_t height = mat.height, width = mat.width, cn = mat.cn;
+    uint8_t *array = (uint8_t*)malloc(height*width*cn*sizeof(uint8_t));
+    memset(array,0, height*width*cn);
+    Mat2Array(&mat,array);
+    Array_Save("./Array/array.bin",array,height*width*cn*sizeof(uint8_t));
+    memset(array,0, height*width*cn);
+    Array_Read("./Array/array.bin",array,height*width*cn*sizeof(uint8_t));
+    Array2Mat(&mat,array);
 
     copy_MatHead(&mat, &dst);
     copyMakeBorder(&mat, &tmp, 1);
