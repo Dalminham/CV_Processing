@@ -40,6 +40,8 @@ int main(int argc, char* argv[])
     uint8_t *array = (uint8_t*)malloc(height*width*cn*sizeof(uint8_t));
     memset(array,0, height*width*cn);
     //Mat2Array(&mat,array);
+    //Array_Print(array,height*width*cn);
+    //Mat2Array(&mat,array);
     //Array_Save("./Array/array.bin",array,height*width*cn*sizeof(uint8_t));
     //Array_Print(array, height*width*cn);
     //memset(array,0, height*width*cn);
