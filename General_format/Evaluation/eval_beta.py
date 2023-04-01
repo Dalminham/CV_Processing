@@ -93,7 +93,7 @@ def bgr2ycbcr(img, only_y=True):
 
 path1 = sys.argv[1]
 path2 = sys.argv[2]
-path3 = "origin/1.bmp"
+path3 = "origin/Pic_out.bmp"
 print(f"path1={path1},path2={path2}")
 im1 = cv2.imread(path1)
 im2 = cv2.imread(path2)

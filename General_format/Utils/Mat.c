@@ -347,6 +347,31 @@ void Mat2Array(Mat_t* mat, uint8_t* array)
     }
 }
 
+void Mat2Array_Partail(Mat_t* mat, uint8_t* array, int midpoint){
+    uint32_t height = mat->height, width = mat->width, cn = mat->cn;
+    int stepsize = width * 32 * cn, maximum = height*width;
+    if(cn == 1){
+        for(int i=0; i < stepsize; i++)
+        {
+            if(midpoint+i == maximum){
+                break;
+            }
+            array[i] = mat->data.gray[midpoint+i];
+        }
+    }
+    else{
+        for(int i=0, j=0; i < stepsize; i+=3 , j++)
+        {
+            if(midpoint+i == maximum){
+                break;
+            }
+            array[i] = mat->data.rgb[j+midpoint].r;
+            array[i+1] = mat->data.rgb[j+midpoint].g;
+            array[i+2] = mat->data.rgb[j+midpoint].b;
+        }
+    }
+}
+
 void Array2Mat(Mat_t* mat, uint8_t* array)
 {
     uint32_t height = mat->height, width = mat->width, cn = mat->cn;
@@ -358,6 +383,25 @@ void Array2Mat(Mat_t* mat, uint8_t* array)
     }
     else{
         for(int i=0, j=0; i < height*width*3; i+=3, j++)
+        {
+            mat->data.rgb[j].r = array[i];
+            mat->data.rgb[j].g = array[i+1];
+            mat->data.rgb[j].b = array[i+2];
+        }
+    }
+}
+
+void Array2Mat_Partial(Mat_t*mat, uint8_t* array, int midpoint){
+    uint32_t height = mat->height, width = mat->width, cn = mat->cn;
+    int stepsize = width * 32 * cn, maximum = height*width;
+    if(cn == 1){
+        for(int i=midpoint,j=0; i < stepsize; i++, j++)
+        {
+            mat->data.gray[i] = array[j];
+        }
+    }
+    else{
+        for(int i=0, j=midpoint; j < stepsize; i+=3, j++)
         {
             mat->data.rgb[j].r = array[i];
             mat->data.rgb[j].g = array[i+1];

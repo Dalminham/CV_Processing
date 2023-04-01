@@ -45,7 +45,8 @@ int main(int argc, char* argv[])
     //Array_Save("./Array/array.bin",array,height*width*cn*sizeof(uint8_t));
     //Array_Print(array, height*width*cn);
     //memset(array,0, height*width*cn);
-    Array_Read("./Array/array.bin",array,height*width*cn*sizeof(uint8_t));
+    Array_Read("./Array/sarray.bin",array,height*width*cn*sizeof(uint8_t));
+    //Array_Save("./Array/sarray.bin",Data_array,height*width*cn*sizeof(uint8_t));
     Array2Mat(&mat,array);
 
     /*retransformation*/

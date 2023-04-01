@@ -38,5 +38,7 @@ void Plane2Mat(image_t *image, Mat_t *mat);
 //Improvement
 void Mat2Array(Mat_t* mat, uint8_t* array);
 void Array2Mat(Mat_t* mat, uint8_t* array);
+void Mat2Array_Partail(Mat_t* mat, uint8_t* array, int midpoint);
+void Array2Mat_Partial(Mat_t*mat, uint8_t* array, int midpoint);
 
 #endif

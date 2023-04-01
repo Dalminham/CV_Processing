@@ -1,3 +1,6 @@
+#ifndef _INCLUDE_ARRAY_IO_H
+#define _INCLUDE_ARRAY_IO_H
+
 #include <stdio.h>
 #include <stdint.h>
 
@@ -36,3 +39,5 @@ void Array_Print(uint8_t* array, int size)
         printf("\n");
     }
 }
+
+#endif
