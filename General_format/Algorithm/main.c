@@ -31,13 +31,14 @@ int Process_Array(char* array_path, int row_width, int cn, char* write_path){
     }
 
     /*Array IO*/
-    Array_Read(array_path, Data_array, size);
+    Array_Read(array_path, Data_array, size*sizeof(uint8_t));
+    //
     Array2Mat(&mat,Data_array);
 
     copy_MatHead(&mat, &dst);
     copyMakeBorder(&mat, &tmp, 1);
     /*free mat*/
-    Mat_free(&mat);
+    
 
     if(cn == 1){
         dst.data.gray = (uint8_t*)malloc(size*sizeof(uint8_t));
@@ -63,6 +64,7 @@ int Process_Array(char* array_path, int row_width, int cn, char* write_path){
 
     /*free*/
     free(Data_array);
+    Mat_free(&mat);
     Mat_free(&tmp);
     Mat_free(&dst);
 }
@@ -75,12 +77,14 @@ int main(int argc, char* argv[])
     }
     int opt = atoi(argv[1]);
     if(opt == 1){
-        assert(argc == 5);
-        char* read_path  = argv[2];
-        int row_width    = atoi(argv[3]);
-        char* write_path = argv[4];
-
-        Process_Array(read_path, row_width, 3, write_path);
+        //assert(argc == 6);
+        int row_width    = atoi(argv[4]);
+        for(int i=0; i<atoi(argv[5]);i++){
+            char* read_path  = num_name_str(argv[2],i);
+            char* write_path = num_name_str(argv[3],i);
+            printf("ARRAY_PROCESS>>>read-path=%s,write-path=%s\n",read_path, write_path);
+            Process_Array(read_path, row_width, 3, write_path);
+        }
     }else if(opt == 0){
         //TODO: bmp2Array
         BMP bmp;
@@ -94,8 +98,8 @@ int main(int argc, char* argv[])
             uint8_t * array = (uint8_t*)malloc(step_size * mat.cn *sizeof(uint8_t));
             memset(array, 0, step_size*mat.cn);
             Mat2Array_Partail(&mat,array,i);
-            char * write_path;
-            num_name_str(argv[3],cnt, write_path);
+            char *write_path = num_name_str(argv[3],cnt);
+            printf("BMP2ARRAY:>>write_path=%s\n",write_path);
             Array_Save(write_path,array,step_size*mat.cn*sizeof(uint8_t));
             free(write_path);
             free(array);
@@ -113,10 +117,13 @@ int main(int argc, char* argv[])
         for(int i=0; i<atoi(argv[3]);i++){
             uint8_t * array = (uint8_t*)malloc(step_size * mat.cn *sizeof(uint8_t));
             memset(array, 0, step_size*mat.cn);
-            char * read_path;
-            num_name_str(argv[4],i, read_path);
+            char * read_path=num_name_str(argv[4],i);
+            printf("ARRAY_TO_BMP>>>read_path=%s\n",read_path);
             Array_Read(read_path,array,step_size*mat.cn*sizeof(uint8_t));
+            assert(step_size*i < mat.width*mat.height);
             Array2Mat_Partial(&mat,array,step_size*i);
+            free(read_path);
+            //free(array);
         }
         Mat2NewBmp(&mat, &bmp, &out_bmp);
         Mat_free(&mat);

@@ -34,7 +34,7 @@ void Array_Print(uint8_t* array, int size)
 {
     for(int i=0; i<size; i++)
     {
-        printf("%d,",array[i]);
+        printf("%d,\n",array[i]);
         if(i%64 ==0)
         printf("\n");
     }

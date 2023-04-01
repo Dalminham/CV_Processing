@@ -395,17 +395,17 @@ void Array2Mat_Partial(Mat_t*mat, uint8_t* array, int midpoint){
     uint32_t height = mat->height, width = mat->width, cn = mat->cn;
     int stepsize = width * 32 * cn, maximum = height*width;
     if(cn == 1){
-        for(int i=midpoint,j=0; i < stepsize; i++, j++)
+        for(int i=0,j=0; i < stepsize; i++, j++)
         {
-            mat->data.gray[i] = array[j];
+            mat->data.gray[i+midpoint] = array[j];
         }
     }
     else{
-        for(int i=0, j=midpoint; j < stepsize; i+=3, j++)
+        for(int i=0, j=0; j < stepsize; i+=3, j++)
         {
-            mat->data.rgb[j].r = array[i];
-            mat->data.rgb[j].g = array[i+1];
-            mat->data.rgb[j].b = array[i+2];
+            mat->data.rgb[j+midpoint].r = array[i];
+            mat->data.rgb[j+midpoint].g = array[i+1];
+            mat->data.rgb[j+midpoint].b = array[i+2];
         }
     }
 }

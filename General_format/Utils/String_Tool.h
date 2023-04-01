@@ -5,10 +5,13 @@
 #include<assert.h>
 
 
-void itoa(char* str, int num){
+char* itoa(int num){
+    char *str = (char*)malloc(4*sizeof(char));
+    for(int i=0;i<4;i++)
+        str[i] = '0';
     int idx=0, mod=num%10, div=num;
     while(div!=0){
-        str[idx++] = mod - '0';
+        str[idx++] = mod + '0';
         div = div/10;
         mod = div%10;
     }
@@ -18,16 +21,16 @@ void itoa(char* str, int num){
         str[3-i] = tmp;
         tmp = str[i+1];
     }
+    return str;
 }
 
 //num maximum is 9999
-void num_name_str(const char* name, int num, char* rstr){
+char* num_name_str(const char* name, int num){
     assert(num<9999);
     int name_len =strlen(name);
-    char num_str[4] = {'0','0','0','0'};
-    rstr = (char*)malloc((name_len+5+4)*sizeof(char));
+    char* num_str = itoa(num);
+    char *rstr = (char*)malloc((name_len+5+4)*sizeof(char));
     memset(rstr, 0 ,(name_len+5+4));
-    itoa(num_str, num);
     for(int i=0, j=0;i<name_len+5+4;i++){
         if(i<name_len){
             rstr[i] = name[i];
@@ -38,10 +41,12 @@ void num_name_str(const char* name, int num, char* rstr){
         }else{
             rstr[i] = '.';
             rstr[i+1] = 'b';
-            rstr[i+1] = 'i';
-            rstr[i+1] = 'n';
+            rstr[i+2] = 'i';
+            rstr[i+3] = 'n';
+            break;
         }
     }
+    return rstr;
 }
 
 #endif
